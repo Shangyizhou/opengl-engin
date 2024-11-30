@@ -45,6 +45,8 @@ public:
         {
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " << e.what() << std::endl;
         }
+        std::cout << "vShaderCode = " << vertexCode << std::endl;
+        std::cout << "fShaderCode = " << fragmentCode << std::endl;
         const char* vShaderCode = vertexCode.c_str();
         const char * fShaderCode = fragmentCode.c_str();
         // 2. compile shaders
@@ -68,7 +70,7 @@ public:
         // delete the shaders as they're linked into our program now and no longer necessary
         glDeleteShader(vertex);
         glDeleteShader(fragment);
-
+        std::cout << "SHADER LINK SUCCESSFUL " << std::endl;
     }
     // activate the shader
     // ------------------------------------------------------------------------

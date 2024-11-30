@@ -90,6 +90,10 @@ void GLRender::loop() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        if (renderCallback_) {
+            renderCallback_();
+        }
+        
         // 交换前后缓冲区
         // OpenGL 使用 双缓冲机制，一个缓冲区用于显示当前画面（前缓冲区），另一个缓冲区用于渲染下一帧（后缓冲区）。
         // 调用 glfwSwapBuffers 将后缓冲区与前缓冲区交换，更新显示内容。
