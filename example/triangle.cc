@@ -1,5 +1,8 @@
 #include "gl_render.h"
 #include "sharder.h"
+#include "vertex_array.h"
+#include "index_buffer.h" 
+
 #include <string>
 
 /**
@@ -101,8 +104,35 @@ int main() {
     Shader sharder(vsPath.c_str(), fsPath.c_str());
     int VAO = getEBO();
 
+    float vertices[] = {
+        0.5f, 0.5f, 0.0f,   // 右上角
+        0.5f, -0.5f, 0.0f,  // 右下角
+        -0.5f, -0.5f, 0.0f, // 左下角
+        -0.5f, 0.5f, 0.0f   // 左上角
+    };
+
+    float indices[] = {
+        // 注意索引从0开始! 
+        // 此例的索引(0,1,2,3)就是顶点数组vertices的下标，
+        // 这样可以由下标代表顶点组合成矩形
+
+        0, 1, 3, // 第一个三角形
+        1, 2, 3  // 第二个三角形
+    };
+
+
+    // VertexArray  vao{}; // 创建并绑定 vao
+    // VertexBuffer vbo{vertices, 12}; // 创建并绑定 vbo
+    // IndexBuffer  ebo{indices, 6}; // 创建并绑定 ebo
+    
+    // VertexData data;
+    // data.pushAttribFloat(3);  // 添加位置属性
+    // vao.addAttribs(vbo, data);
+
     render.setRenderCallback([=](){
         sharder.use();
+        // glBindVertexArray(vao);
+        // vao.bind();
         glBindVertexArray(VAO);
         // 从 VBO 中获取，因为只有三个，所以是三角形
         // glDrawArrays(GL_TRIANGLES, 0, 6); 

@@ -57,13 +57,85 @@ int initVAO() {
     return VAO;
 }
 
+void initTexture1(GLuint & texture1) {
+    // load and create a texture 
+    // -------------------------
+    // texture 1
+    // ---------
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1); 
+     // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    std::string path = "..\\resource\\image\\container.jpg";
+    unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR) {
+            std::cerr << "OpenGL Error after glTexImage2D: " << error << std::endl;
+        }
+        glGenerateMipmap(GL_TEXTURE_2D);
+        error = glGetError();
+        if (error != GL_NO_ERROR) {
+            std::cerr << "OpenGL Error after glTexImage2D: " << error << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+}
+
+void initTexture2(GLuint & texture2) {
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load image, create texture and generate mipmaps
+    std::string path2 = "..\\resource\\image\\awesomeface.png";
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load(path2.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR) {
+            std::cerr << "OpenGL Error after glTexImage2D: " << error << std::endl;
+        }
+        glGenerateMipmap(GL_TEXTURE_2D);
+        error = glGetError();
+        if (error != GL_NO_ERROR) {
+            std::cerr << "OpenGL Error after glTexImage2D: " << error << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+}
+
 /**
  * 纹理资源可以另外封装使用
 */
-void initTexture(unsigned int& id, const std::string path) {
+void initTexture(unsigned int& id, const std::string path, bool isRGBA) {
     int width, height, nrChannels;
-    // texture 2
-    // ---------
+
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
     GLenum error = glGetError();
@@ -76,12 +148,17 @@ void initTexture(unsigned int& id, const std::string path) {
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    if (isRGBA)
+        stbi_set_flip_vertically_on_load(true);  
     // load image, create texture and generate mipmaps
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
     if (data)
     {
         // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        if (isRGBA)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        else    
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data); 
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
             std::cerr << "OpenGL Error after glTexImage2D: " << error << std::endl;
@@ -100,40 +177,62 @@ void initTexture(unsigned int& id, const std::string path) {
 }
 
 void initTexture(unsigned int& texture1, unsigned int& texture2) {
-    std::string path1 = "..\\resource\\image\\container.png";
+    std::string path1 = "..\\resource\\image\\container.jpg";
     std::string path2 = "..\\resource\\image\\awesomeface.png";
-    initTexture(texture1, path1);
-    initTexture(texture2, path2);
+    // initTexture(texture1, path1, true);
+    // initTexture(texture2, path2, false);
+    initTexture1(texture1);
+    initTexture2(texture2);
+
+}
+
+void GLAPIENTRY debug(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+	std::cout << std::hex
+	          << "source:0x" << source << std::endl
+	          << "type:0x" << type << std::endl
+	          << "id:0x" << id << std::endl
+	          << "severity:0x" << severity << std::endl
+	          << "length:" << length << std::endl
+	          << "message:" << message << std::endl
+	          << "userParam:" << userParam << std::endl
+	          << std::dec;
 }
 
 int main() {
-    unsigned int texture1, texture2;
+    // glEnable(GL_DEBUG_OUTPUT);
+
     GLRender render;
     render.init();
-    
+    std::string path1 = "..\\resource\\image\\container.jpg";
+    std::string path2 = "..\\resource\\image\\awesomeface.png";
     Shader sharder("..\\resource\\shader\\texture\\texture.vs", "..\\resource\\shader\\texture\\texture.fs");
     int VAO = initVAO();
-    sharder.use();
-    std::cout << "VAO is " << VAO;
-    // 设置纹理单元，并将其传递给着色器的采样器
+    unsigned int texture1, texture2;
+
     initTexture(texture1, texture2);
+    
+    sharder.use();
     sharder.setInt("texture1", 0);
     sharder.setInt("texture2", 1);
-
+    
     render.setRenderCallback([=](){
         // 激活第一个纹理单元
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
+
         // 激活第二个纹理单元
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
+
         // 绘制物体
+        sharder.use();
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     });
-
     render.loop();
-    
+    // 放到渲染前会阻塞
+    glDebugMessageCallback(debug, nullptr);
 
     return 0;
 }

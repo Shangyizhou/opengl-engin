@@ -1,0 +1,20 @@
+[
+{
+  "directory": "D:/shangyizhou/code/opengl/opengl-engine/build/example",
+  "command": "C:\\MinGW\\bin\\g++.exe  @CMakeFiles/texture.dir/includes_CXX.rsp  -Wall -Wextra -g -g -std=gnu++1z -o CMakeFiles\\texture.dir\\texture.cc.obj -c D:\\shangyizhou\\code\\opengl\\opengl-engine\\example\\texture.cc",
+  "file": "D:/shangyizhou/code/opengl/opengl-engine/example/texture.cc",
+  "output": "example/CMakeFiles/texture.dir/texture.cc.obj"
+},
+{
+  "directory": "D:/shangyizhou/code/opengl/opengl-engine/build/example",
+  "command": "C:\\MinGW\\bin\\g++.exe  @CMakeFiles/triangle.dir/includes_CXX.rsp  -Wall -Wextra -g -g -std=gnu++1z -o CMakeFiles\\triangle.dir\\triangle.cc.obj -c D:\\shangyizhou\\code\\opengl\\opengl-engine\\example\\triangle.cc",
+  "file": "D:/shangyizhou/code/opengl/opengl-engine/example/triangle.cc",
+  "output": "example/CMakeFiles/triangle.dir/triangle.cc.obj"
+},
+{
+  "directory": "D:/shangyizhou/code/opengl/opengl-engine/build/example",
+  "command": "C:\\MinGW\\bin\\g++.exe  @CMakeFiles/windows.dir/includes_CXX.rsp  -Wall -Wextra -g -g -std=gnu++1z -o CMakeFiles\\windows.dir\\windows.cc.obj -c D:\\shangyizhou\\code\\opengl\\opengl-engine\\example\\windows.cc",
+  "file": "D:/shangyizhou/code/opengl/opengl-engine/example/windows.cc",
+  "output": "example/CMakeFiles/windows.dir/windows.cc.obj"
+}
+]

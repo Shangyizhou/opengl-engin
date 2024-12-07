@@ -19,6 +19,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # Add the include directories
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src/core)
+include_directories(${PROJECT_SOURCE_DIR}/src/core/buffer)
 set(LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # Add the executable
